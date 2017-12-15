@@ -1,0 +1,95 @@
+<div>
+    <ng-form name="fromQprotractor">
+        <div id="present-hidden-element" style="display:none;">
+        </div>
+        <div>
+            <input type="text" id="validation-error-field" name="validationErrorField" placeholder="Enter up to 9 digits" 
+            ng-model="validationErrorField" ng-maxlength="9" ng-pattern="/^[0-9]*$/">
+            <div ng-messages="fromQprotractor.validationErrorField.$error" ng-if="fromQprotractor.validationErrorField.$dirty">
+                <div ng-message="maxlength" class="error-msg truncate">Use maximum 9 digits</div>
+                <div ng-message="pattern" class="error-msg truncate">Use digits only</div>
+            </div>
+        </div>
+        <div>
+            <label class="elementsToSort" sort-order-attribute="12" for="username">Username: </label>
+            <input type="text" id="username" ng-model="username" placeholder="Type your username" />
+            <label class="elementsToSort" for="marital-status" sort-order-attribute="6">Marital Status: </label>
+            <select id="marital-status" ng-options="maritalStatusItem for maritalStatusItem in maritalStatusList" ng-model="maritalStatus">
+                <option value="">---Please select---</option>
+            </select>
+            <label class="elementsToSort" sort-order-attribute="2">
+                Do you have dogs:
+                <input type="checkbox" id="dogs-checkbox" ng-model="dogsCheckbox" ng-true-value="'YES'" ng-false-value="'NO'">
+            </label>
+        </div>
+        <br>
+        <div>
+            <label>Gender: </label>
+            <br>
+            <label class="elementsToSort" for="gender-male" sort-order-attribute="5">
+                <input type="radio" id="gender-male" ng-model="genderRadio" ng-value="'Male'">
+                I am a Male
+            </label>
+            <br>
+            <label class="elementsToSort" for="gender-female" sort-order-attribute="1">
+                <input type="radio" id="gender-female" ng-model="genderRadio" ng-value="'Female'">
+                I am a Female
+            </label>
+        </div>
+        <div>
+            <label>Not Selected Radio Box: </label>
+            <br>
+            <label for="choice-1">
+                <input type="radio" id="choice-1" ng-model="radioChoice" ng-value="'Choice 1'">
+                Choice 1
+            </label>
+            <br>
+            <label for="choice-2">
+                <input type="radio" id="choice-2" ng-model="radioChoice" ng-value="'Choice 2'">
+                Choice 2
+            </label>
+        </div>
+        <br>
+        <div>
+            <label class="elementsToSort" for="disabled-field">Disabled Field: </label>
+            <input type="text" id="disabled-field" ng-model="disabledField" ng-disabled="true">
+            <label class="elementsToSort" for="enabled-field">Enabled Field: </label>
+            <input type="text" id="enabled-field" ng-model="enabledField" ng-disabled="false">
+            <label class="elementsToSort" for="hidden-field">Hidden Field: </label>
+            <input type="text" id="hidden-field" ng-model="hiddenField" ng-hide="true">
+        </div>
+        <br>
+        <div id="where-you-live-container">
+            <label for="live-in-my-country">I live in my country: </label>
+            <input type="radio" id="live-in-my-country" ng-model="liveInMyCountry" ng-value="'YES'">
+            <label for="live-abroad">I live abroad: </label>
+            <input type="radio" id="live-abroad" ng-model="liveInMyCountry" ng-value="'NO'">
+        </div>
+        <br>
+        <div>
+            Tick by container: <input type="radio" id="tick-by-container" ng-model="tickByContainer" ng-value="'YES'">
+        </div>
+        <br>
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <td>First Name</td>
+                        <td>Last Name</td>
+                        <td>Age</td>
+                        <td>Hero Name</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="data in tableData">
+                        <td class="table-first-name">{{data.firstName}}</td>
+                        <td class="table-last-name">{{data.lastName}}</td>
+                        <td class="table-age">{{data.age}}</td>
+                        <td class="table-hero-name">{{data.heroName}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-form>
+
+</div>
