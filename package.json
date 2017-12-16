@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/quirimmo/protractor-performances-analysis#readme",
   "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-protractor": "^4.1.0",
     "jasmine": "^2.8.0",
     "protractor": "^5.2.2"
   }

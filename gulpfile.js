@@ -1,11 +1,25 @@
 'use strict';
 
+// Modules Declaration
+// -------------------------------------------------------------------
 const gulp = require('gulp');
-const clean = require('gulp-clean');
-const minify = require('gulp-minify');
 const gls = require('gulp-live-server');
 const protractor = require("gulp-protractor").protractor;
 
+
+// Exposed Tasks
+// -------------------------------------------------------------------
+gulp.task('clean-dist', cleanDist);
+gulp.task('clean-app-components', cleanAppComponents);
+gulp.task('copy-app-components', ['clean-app-components'], copyAppComponents);
+gulp.task('publish', ['clean-dist', 'copy-app-components'], publish);
+gulp.task('serve', ['publish'], serve);
+gulp.task('serve-no-watch', ['publish'], serveNoWatch);
+gulp.task('protractor-test', ['serve-no-watch'], protractorTest);
+
+
+// Global Variables
+// -------------------------------------------------------------------
 const PATH = {
     components: './sample/app/components',
     dist: './dist',
@@ -20,16 +34,25 @@ const APP_COMPONENTS = [
     './node_modules/angular-ui-router/release/angular-ui-router.min.js'
 ];
 
+let serverNoWatch;
 
-gulp.task('clean-dist', function() {
+
+// Private Methods 
+// -------------------------------------------------------------------
+function serveNoWatch() {
+    serverNoWatch = gls.static(PATH.app, 9000);
+    serverNoWatch.start();
+}
+
+function cleanDist() {
     return gulp.src(PATH.dist, { read: false }).pipe(clean());
-});
+}
 
-gulp.task('clean-app-components', function() {
+function cleanAppComponents() {
     return gulp.src(PATH.components, { read: false }).pipe(clean());
-});
+}
 
-gulp.task('publish', ['clean-dist', 'copy-app-components'], function() {
+function publish() {
     gulp
         .src(PATH.src)
         .pipe(minify({
@@ -38,36 +61,30 @@ gulp.task('publish', ['clean-dist', 'copy-app-components'], function() {
             }
         }))
         .pipe(gulp.dest(PATH.dist));
-});
+}
 
-gulp.task('serve', ['publish'], function() {
+function serve() {
     let server = gls.static(PATH.app, 9000);
     server.start();
     gulp.watch(APP_FILES_TO_WATCH, function(file) {
         server.notify.apply(server, [file]);
     });
-});
+}
 
-let serverNoWatch;
-gulp.task('serve-no-watch', ['publish'], function() {
-    serverNoWatch = gls.static(PATH.app, 9000);
-    serverNoWatch.start();
-});
-
-gulp.task('copy-app-components', ['clean-app-components'], function() {
+function copyAppComponents() {
     gulp
         .src(APP_COMPONENTS)
         .pipe(gulp.dest(PATH.components));
-});
+}
 
-gulp.task('protractor-test', ['serve-no-watch'], function() {
+function protractorTest() {
     return gulp.src(PATH.test)
         .pipe(protractor({
             configFile: PATH.protractorConfig
         }))
         .on('close', function() {
-            console.log('exit'); 
+            console.log('exit');
             serverNoWatch.stop();
         })
         .on('error', function(e) { throw e; });
-});
+}
