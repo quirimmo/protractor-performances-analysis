@@ -17,7 +17,13 @@
   },
   "homepage": "https://github.com/quirimmo/protractor-performances-analysis#readme",
   "devDependencies": {
+    "angular": "^1.6.4",
+    "angular-ui-router": "^1.0.3",
     "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-cli": "^1.4.0",
+    "gulp-live-server": "0.0.31",
+    "gulp-minify": "^1.0.0",
     "gulp-protractor": "^4.1.0",
     "jasmine": "^2.8.0",
     "protractor": "^5.2.2"

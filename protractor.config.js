@@ -29,5 +29,8 @@ exports.config = {
     ],
     plugins: [{
         inline: require('./index')
-    }]
+    }],
+    onPrepare: function() {
+        browser.waitForAngularEnabled(true);
+    }
 };

@@ -3,6 +3,8 @@
 // Modules Declaration
 // -------------------------------------------------------------------
 const gulp = require('gulp');
+const clean = require('gulp-clean');
+const minify = require('gulp-minify');
 const gls = require('gulp-live-server');
 const protractor = require("gulp-protractor").protractor;
 
@@ -21,14 +23,14 @@ gulp.task('protractor-test', ['serve-no-watch'], protractorTest);
 // Global Variables
 // -------------------------------------------------------------------
 const PATH = {
-    components: './sample/app/components',
+    components: './app-sample/components',
     dist: './dist',
-    app: './sample/app/',
-    src: './src/qprotractor.js',
+    app: './app-sample/',
+    src: './index.js',
     test: './test/*.spec.js',
     protractorConfig: './protractor.config.js'
 };
-const APP_FILES_TO_WATCH = 'sample/app/**/*.*';
+const APP_FILES_TO_WATCH = 'app-sample/**/*.*';
 const APP_COMPONENTS = [
     './node_modules/angular/angular.min.js',
     './node_modules/angular-ui-router/release/angular-ui-router.min.js'

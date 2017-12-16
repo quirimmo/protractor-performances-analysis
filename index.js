@@ -1,6 +1,7 @@
 class PerformanceAnalysisPlugin {
 
     constructor() {
+        console.log('Exported!');
     }
 
     setup() {
@@ -8,4 +9,5 @@ class PerformanceAnalysisPlugin {
     }
 }
 
-module.exports.PerformancesAnalysisPlugin = new PerformanceAnalysisPlugin();
+module.exports = new PerformanceAnalysisPlugin();
+module.exports.PerformanceAnalysisPlugin = PerformanceAnalysisPlugin;

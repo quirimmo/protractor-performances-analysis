@@ -6,7 +6,7 @@ describe('Main Tests', function() {
 
     describe('Main Test', () => {
         it('should run', () => {
-            console.log('running test');
+            expect(1).toBe(1);
         });
     });
 
