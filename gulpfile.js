@@ -27,7 +27,7 @@ const PATH = {
     dist: './dist',
     app: './app-sample/',
     src: './index.js',
-    test: './test/*.spec.js',
+    test: './test/*.steps.js',
     protractorConfig: './protractor.config.js'
 };
 const APP_FILES_TO_WATCH = 'app-sample/**/*.*';
@@ -80,7 +80,8 @@ function copyAppComponents() {
 }
 
 function protractorTest() {
-    return gulp.src(PATH.test)
+    // return gulp.src(PATH.test)
+    return gulp.src('./test/main.feature')
         .pipe(protractor({
             configFile: PATH.protractorConfig
         }))
