@@ -5,3 +5,8 @@ Feature: Main Test
 		Given I load the page
 		When I do some useless operation
 		Then I check the expectation
+
+	Scenario: Second Scenario
+		Given I load the page
+		When I do some useless operation
+		Then I check the expectation

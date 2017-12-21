@@ -15,9 +15,7 @@ exports.config = {
     directConnect: false,
     allScriptsTimeout: 11000,
     getPageTimeout: 10000,
-    // framework: 'jasmine2',
     framework: 'custom',
-    // path relative to the current config file
     frameworkPath: require.resolve('protractor-cucumber-framework'),
     jasmineNodeOpts: {
         defaultTimeoutInterval: 30000
@@ -34,10 +32,12 @@ exports.config = {
         inline: require('./index')
     }],
     specs: [
-        'test/main.feature'
+        './test/main.feature'
     ],
     cucumberOpts: {
-        require: './test/**/*.js'
+        require: [
+            './test/main.steps.js'
+        ]
     },
     jasmineNodeOpts: {
         showColors: true,
@@ -47,9 +47,3 @@ exports.config = {
         browser.waitForAngularEnabled(true);
     }
 };
-
-
-// specs: [
-//     './test/**/*.js'
-// ],
-// require feature files
