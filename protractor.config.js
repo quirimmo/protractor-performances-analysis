@@ -15,22 +15,35 @@ exports.config = {
     directConnect: false,
     allScriptsTimeout: 11000,
     getPageTimeout: 10000,
-    framework: 'jasmine2',
+    framework: 'custom',
+    frameworkPath: require.resolve('protractor-cucumber-framework'),
     jasmineNodeOpts: {
         defaultTimeoutInterval: 30000
     },
     capabilities: {
-        'browserName': 'chrome'
+        'browserName': 'chrome',
+        'chromeOptions': {
+			'args': ['disable-web-security', 'lang=en_GB', 'window-size=1200,1000']
+		}
     },
     baseUrl: 'http://localhost:9000',
     seleniumServerJar: `./node_modules/protractor/node_modules/webdriver-manager/selenium/selenium-server-standalone-${seleniumVersion}.jar`,
-    specs: [
-        './test/**/*.js'
-    ],
     plugins: [{
         inline: require('./index')
     }],
-    onPrepare: function() {
+    specs: [
+        './test/main.feature'
+    ],
+    cucumberOpts: {
+        require: [
+            './test/main.steps.js'
+        ]
+    },
+    jasmineNodeOpts: {
+        showColors: true,
+        defaultTimeoutInterval: 30000
+	},
+    onPrepare: function () {
         browser.waitForAngularEnabled(true);
     }
 };
