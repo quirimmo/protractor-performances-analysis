@@ -7,6 +7,7 @@ const clean = require('gulp-clean');
 const minify = require('gulp-minify');
 const gls = require('gulp-live-server');
 const protractor = require("gulp-protractor").protractor;
+const KarmaServer = require('karma').Server;
 
 
 // Exposed Tasks
@@ -18,6 +19,7 @@ gulp.task('publish', ['clean-dist', 'copy-app-components'], publish);
 gulp.task('serve', ['publish'], serve);
 gulp.task('serve-no-watch', ['publish'], serveNoWatch);
 gulp.task('protractor-test', ['serve-no-watch'], protractorTest);
+gulp.task('unit-test', unitTest);
 
 
 // Global Variables
@@ -93,4 +95,19 @@ function protractorTest() {
     function onProtractorError(e) {
         throw e;
     }
+}
+
+function unitTest(done) {
+    const karmaServerInstance = new KarmaServer({
+        configFile: `${__dirname}/karma.config.js`,
+        singleRun: true
+    });
+
+    karmaServerInstance.on('run_complete', (browsers, results) =>
+        (results.error || results.failed) ?
+        done(new Error('There are test failures')) :
+        done()
+    );
+
+    karmaServerInstance.start();
 }
