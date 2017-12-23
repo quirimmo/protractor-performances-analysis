@@ -27,7 +27,9 @@ const PATH = {
     dist: './dist',
     app: './app-sample/',
     src: './index.js',
-    test: './test/**/*.feature',
+    e2eTest: './test/**/*.feature',
+    unitTest: './src/**/*.spec.js',
+    karmaConfig: './karma.config.js',
     protractorConfig: './protractor.config.js'
 };
 const APP_FILES_TO_WATCH = 'app-sample/**/*.*';
@@ -36,57 +38,59 @@ const APP_COMPONENTS = [
     './node_modules/angular-ui-router/release/angular-ui-router.min.js'
 ];
 
-let serverNoWatch;
 
 
 // Private Methods 
 // -------------------------------------------------------------------
+let serverNoWatch;
+
 function serveNoWatch() {
     serverNoWatch = gls.static(PATH.app, 9000);
     serverNoWatch.start();
 }
 
 function cleanDist() {
-    return gulp.src(PATH.dist, { read: false }).pipe(clean());
+    return gulp.src(PATH.dist, { read: false })
+        .pipe(clean());
 }
 
 function cleanAppComponents() {
-    return gulp.src(PATH.components, { read: false }).pipe(clean());
+    return gulp.src(PATH.components, { read: false })
+        .pipe(clean());
 }
 
 function publish() {
-    gulp
-        .src(PATH.src)
-        .pipe(minify({
-            ext: {
-                min: '.min.js'
-            }
-        }))
+    return gulp.src(PATH.src)
+        .pipe(minify({ ext: { min: '.min.js' } }))
         .pipe(gulp.dest(PATH.dist));
 }
 
 function serve() {
     let server = gls.static(PATH.app, 9000);
     server.start();
-    gulp.watch(APP_FILES_TO_WATCH, function(file) {
+    gulp.watch(APP_FILES_TO_WATCH, onFileChanged);
+
+    function onFileChanged(file) {
         server.notify.apply(server, [file]);
-    });
+    }
 }
 
 function copyAppComponents() {
-    gulp
-        .src(APP_COMPONENTS)
+    return gulp.src(APP_COMPONENTS)
         .pipe(gulp.dest(PATH.components));
 }
 
 function protractorTest() {
-    return gulp.src(PATH.test)
-        .pipe(protractor({
-            configFile: PATH.protractorConfig
-        }))
-        .on('close', function() {
-            console.log('exit');
-            serverNoWatch.stop();
-        })
-        .on('error', function(e) { throw e; });
+    return gulp.src(PATH.e2eTest)
+        .pipe(protractor({ configFile: PATH.protractorConfig }))
+        .on('close', onProtractorClose)
+        .on('error', onProtractorError);
+
+    function onProtractorClose() {
+        serverNoWatch.stop();
+    }
+
+    function onProtractorError(e) {
+        throw e;
+    }
 }
