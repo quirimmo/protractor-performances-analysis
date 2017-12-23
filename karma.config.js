@@ -2,54 +2,66 @@
 
 function KarmaConfiguration(config) {
     config.set({
-
-        plugins: [
-            'karma-mocha',
-            'karma-chai',
-            'karma-chrome-launcher',
-            'karma-babel-preprocessor'
-        ],
-
-        preprocessors: {
-            'src/**/*.js': ['babel']
-        },
-
-        babelPreprocessor: {
-            options: {
-                "presets": ["es2015"],
-                "plugins": ["transform-es2015-modules-umd"]
-            },
-            filename: function(file) {
-                console.log(`Transpiling ${file}`);
-                return file.originalPath.replace(/\.js$/, '.es5.js');
-            },
-            sourceFileName: function(file) {
-                return file.originalPath;
-            }
-        },
-
         basePath: '',
-
-        frameworks: ['mocha', 'chai'],
-
-        files: [
-            'node_modules/babel-polyfill/dist/polyfill.js',
-
-            './src/**/!(*.spec).js',
-
-            './src/**/*.spec.js'
-        ],
-
         port: 9876,
         colors: true,
         autoWatch: true,
         singleRun: false,
-
         logLevel: config.LOG_INFO,
-
-        browsers: ['Chrome']
-
+        browsers: getKarmaBrowsers(),
+        plugins: getPluginsList(),
+        preprocessors: getKarmaPreprocessors(),
+        babelPreprocessor: getBabelPreprocessor(),
+        frameworks: getKarmaFrameworks(),
+        files: getKarmaFiles()
     });
 }
 
 module.exports = KarmaConfiguration;
+
+
+// Private Methods 
+// --------------------------------------------------------------------------------
+function getPluginsList() {
+    return [
+        'karma-mocha',
+        'karma-chai',
+        'karma-chrome-launcher',
+        'karma-babel-preprocessor'
+    ];
+}
+
+function getKarmaPreprocessors() {
+    return { 'src/**/*.js': ['babel'] };
+}
+
+function getKarmaFrameworks() {
+    return ['mocha', 'chai'];
+}
+
+function getKarmaBrowsers() {
+    return ['Chrome'];
+}
+
+function getBabelPreprocessor() {
+    return {
+        options: getBabelPreprocessorOptions(),
+        filename: file => file.originalPath.replace(/\.js$/, '.es5.js'),
+        sourceFileName: file => file.originalPath
+    };
+
+    function getBabelPreprocessorOptions() {
+        return {
+            'presets': ['es2015'],
+            'plugins': ['transform-es2015-modules-umd']
+        };
+    }
+}
+
+function getKarmaFiles() {
+    return [
+        'node_modules/babel-polyfill/dist/polyfill.js',
+        './src/**/!(*.spec).js',
+        './src/**/*.spec.js'
+    ];
+}
