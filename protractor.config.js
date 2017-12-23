@@ -1,49 +1,72 @@
-const SELENIUM_FOLDER = './node_modules/protractor/node_modules/webdriver-manager/selenium';
+// Required Modules
+// ----------------------------------------------------------------------------
 const fs = require('fs');
-let res, seleniumVersion;
-fs.readdirSync(SELENIUM_FOLDER).forEach(file => {
-    res = file.match(/selenium-server-standalone-(\d{1}.\d{1}.\d{1}).jar/i);
-    if (res) {
-        seleniumVersion = res[1];
-    }
-})
-if (!seleniumVersion) {
-    throw new Error('No selenium server jar found inside your protractor node_modules subfolder');
-}
 
+
+// Variables list
+// ----------------------------------------------------------------------------
+const seleniumVersion = findLocalSeleniumVersion();
+const SELENIUM_SERVER_JAR_PATH = `./node_modules/protractor/node_modules/webdriver-manager/selenium/selenium-server-standalone-${seleniumVersion}.jar`;
+const SPECS_PATH = ['./test/**/*.feature'];
+const STEPS_PATH = ['./test/**/*.steps.js'];
+const PROTRACTOR_PLUGINS_INJECTION = [{ inline: require('./index') }];
+
+
+// Protractor Config
+// ----------------------------------------------------------------------------
 exports.config = {
     directConnect: false,
     allScriptsTimeout: 11000,
     getPageTimeout: 10000,
     framework: 'custom',
     frameworkPath: require.resolve('protractor-cucumber-framework'),
-    jasmineNodeOpts: {
-        defaultTimeoutInterval: 30000
-    },
-    capabilities: {
-        'browserName': 'chrome',
-        'chromeOptions': {
-			'args': ['disable-web-security', 'lang=en_GB', 'window-size=1200,1000']
-		}
-    },
+    jasmineNodeOpts: getJasmineOptions(),
+    capabilities: getCapabilities(),
     baseUrl: 'http://localhost:9000',
-    seleniumServerJar: `./node_modules/protractor/node_modules/webdriver-manager/selenium/selenium-server-standalone-${seleniumVersion}.jar`,
-    plugins: [{
-        inline: require('./index')
-    }],
-    specs: [
-        './test/main.feature'
-    ],
-    cucumberOpts: {
-        require: [
-            './test/main.steps.js'
-        ]
-    },
-    jasmineNodeOpts: {
+    seleniumServerJar: SELENIUM_SERVER_JAR_PATH,
+    plugins: PROTRACTOR_PLUGINS_INJECTION,
+    specs: SPECS_PATH,
+    cucumberOpts: { require: STEPS_PATH },
+    onPrepare: onPrepareProtractor
+};
+
+
+// Private Methods
+// ----------------------------------------------------------------------------
+function findLocalSeleniumVersion() {
+    const SELENIUM_FOLDER = './node_modules/protractor/node_modules/webdriver-manager/selenium';
+    let res, seleniumVersionFound;
+
+    fs.readdirSync(SELENIUM_FOLDER).forEach(onEachFile);
+    if (!seleniumVersionFound) {
+        throw new Error(`No selenium server jar found inside your protractor node_modules subfolder: ${SELENIUM_FOLDER}`);
+    }
+    return seleniumVersionFound;
+
+    function onEachFile(file) {
+        res = file.match(/selenium-server-standalone-(\d{1}.\d{1}.\d{1}).jar/i);
+        if (res) {
+            seleniumVersionFound = res[1];
+        }
+    }
+}
+
+function getJasmineOptions() {
+    return {
         showColors: true,
         defaultTimeoutInterval: 30000
-	},
-    onPrepare: function () {
-        browser.waitForAngularEnabled(true);
-    }
-};
+    };
+}
+
+function getCapabilities() {
+    return {
+        'browserName': 'chrome',
+        'chromeOptions': {
+            'args': ['disable-web-security', 'lang=en_GB', 'window-size=1200,1000']
+        }
+    };
+}
+
+function onPrepareProtractor() {
+    browser.waitForAngularEnabled(true);
+}
