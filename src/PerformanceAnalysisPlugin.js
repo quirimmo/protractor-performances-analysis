@@ -7,6 +7,7 @@ class PerformanceAnalysisPlugin {
     onPrepare() {}
 
     postTest(passed, testInfo) {
+        // here a test is just finished
         console.log('Post Test');
         console.log(testInfo);
     }
