@@ -8,6 +8,8 @@ const minify = require('gulp-minify');
 const gls = require('gulp-live-server');
 const protractor = require("gulp-protractor").protractor;
 const KarmaServer = require('karma').Server;
+const mocha = require('gulp-mocha');
+
 
 
 // Exposed Tasks
@@ -98,16 +100,23 @@ function protractorTest() {
 }
 
 function unitTest(done) {
-    const karmaServerInstance = new KarmaServer({
-        configFile: `${__dirname}/karma.config.js`,
-        singleRun: true
-    });
+    return gulp.src(['src/*.spec.js'], { read: false })
+        .pipe(mocha({
+            // globals: {
+            //     should: require('should')
+            // }
+        }));
 
-    karmaServerInstance.on('run_complete', (browsers, results) =>
-        (results.error || results.failed) ?
-        done(new Error('There are test failures')) :
-        done()
-    );
+    // const karmaServerInstance = new KarmaServer({
+    //     configFile: `${__dirname}/karma.config.js`,
+    //     singleRun: true
+    // });
 
-    karmaServerInstance.start();
+    // karmaServerInstance.on('run_complete', (browsers, results) =>
+    //     (results.error || results.failed) ?
+    //     done(new Error('There are test failures')) :
+    //     done()
+    // );
+
+    // karmaServerInstance.start();
 }

@@ -1,15 +1,20 @@
+'use strict';
 
+global.chai = require('chai');
+global.sinon = require('sinon');
+global.sinonChai = require('sinon-chai');
+global.chai.should();
+global.expect = global.chai.expect;
+global.chai.use(global.sinonChai);
+
+
+const PerformanceAnalysisPlugin = require('./PerformanceAnalysisPlugin');
 
 describe("PerformanceAnalysisPlugin", () => {
 
     describe('Init', () => {
         it('should define the class', () => {
-            const chai = require('chai');
-            const PerformanceAnalysisPlugin = require(`/src/PerformanceAnalysisPlugin.es5`);
-            console.log('AAAA');
-            console.log(PerformanceAnalysisPlugin);
-
-            PerformanceAnalysisPlugin.should.be.defined;
+            PerformanceAnalysisPlugin.should.not.be.undefined;
         });
     });
 
