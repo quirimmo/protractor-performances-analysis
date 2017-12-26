@@ -31,7 +31,7 @@ const PATH = {
     app: './app-sample/',
     src: './index.js',
     e2eTest: './test/**/*.feature',
-    unitTest: './src/**/*.spec.js',
+    unitTest: ['./src/common-utils.spec.js', './src/**/!(common-utils).spec.js'],
     protractorConfig: './protractor.config.js'
 };
 const APP_FILES_TO_WATCH = 'app-sample/**/*.*';
