@@ -21,6 +21,7 @@ gulp.task('serve', ['publish'], serve);
 gulp.task('serve-no-watch', ['publish'], serveNoWatch);
 gulp.task('protractor-test', ['serve-no-watch'], protractorTest);
 gulp.task('unit-test', unitTest);
+gulp.task('unit-test-single-run', unitTestSingleRun);
 
 
 // Global Variables
@@ -30,6 +31,7 @@ const PATH = {
     dist: './dist',
     app: './app-sample/',
     src: './index.js',
+    srcFiles: './src/**/*.js',
     e2eTest: './test/**/*.feature',
     unitTest: ['./src/common-utils.spec.js', './src/**/!(common-utils).spec.js'],
     protractorConfig: './protractor.config.js'
@@ -97,7 +99,14 @@ function protractorTest() {
     }
 }
 
-function unitTest(done) {
+function unitTest() {
+    // watch for changes and execute tests again
+    gulp.watch(PATH.srcFiles, ['unit-test-single-run']);
+    // run tests the first time when the task is executed
+    return unitTestSingleRun();
+}
+
+function unitTestSingleRun() {
     return gulp.src(PATH.unitTest, { read: false })
         .pipe(mocha());
 }
