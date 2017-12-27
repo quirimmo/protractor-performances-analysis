@@ -2,20 +2,7 @@
 
 const PerformanceAnalysisPlugin = require('./PerformanceAnalysisPlugin');
 const performanceAnalysisPluginInstance = new PerformanceAnalysisPlugin();
-// const PerformanceResultsData = require('./PerformanceResultsData');
-// let spy = sinon.spy(PerformanceResultsData, 'constructor');
-
-// sinon.stubConstructor = function(constructor, fake) {
-//     return sinon.spy((...args) => { // alternatively: sinon.stub().callsFake(..)
-//         var i = Object.create(constructor.prototype);
-//         fake.apply(i, args);
-//         return i;
-//     })
-// }
-
-// var stubbedConstructor = sinon.stubConstructor(PerformanceResultsData, function() {
-//     this.baz = 42;
-// });
+const PerformanceResultsData = require('./PerformanceResultsData');
 
 
 describe("PerformanceAnalysisPlugin", () => {
@@ -39,9 +26,10 @@ describe("PerformanceAnalysisPlugin", () => {
 
     describe('onPrepare', () => {
         it('should instantiate the PerformanceResultsData instance', () => {
-            // const PerformanceResultsDataInstance = sinon.stub(PerformanceResultsData.prototype, 'constructor').returns(function() { console.log('aaa'); });
+            should.not.exist(performanceAnalysisPluginInstance.performanceResultsData);
             performanceAnalysisPluginInstance.onPrepare();
-            // spy.should.have.been.called;
+            performanceAnalysisPluginInstance.performanceResultsData.should.be.an('object');
+            (performanceAnalysisPluginInstance.performanceResultsData instanceof PerformanceResultsData).should.be.eql(true);
         });
     });
 
@@ -50,27 +38,6 @@ describe("PerformanceAnalysisPlugin", () => {
             performanceAnalysisPluginInstance.config = {};
             performanceAnalysisPluginInstance.setup();
             performanceAnalysisPluginInstance.name.should.be.eql('Protractor Performances Analysis Plugin');
-        });
-
-        describe('using cucumber', () => {
-            it('should set using cucumber to true by default if no config parameter provided', () => {
-                performanceAnalysisPluginInstance.config = {};
-                performanceAnalysisPluginInstance.setup();
-                performanceAnalysisPluginInstance.usingCucumber.should.be.eql(true);
-            });
-
-
-            it('should set using cucumber to true if true provided', () => {
-                performanceAnalysisPluginInstance.config = { usingCucumber: true };
-                performanceAnalysisPluginInstance.setup();
-                performanceAnalysisPluginInstance.usingCucumber.should.be.eql(true);
-            });
-
-            it('should set using cucumber to true if false provided', () => {
-                performanceAnalysisPluginInstance.config = { usingCucumber: false };
-                performanceAnalysisPluginInstance.setup();
-                performanceAnalysisPluginInstance.usingCucumber.should.be.eql(false);
-            });
         });
     });
 
