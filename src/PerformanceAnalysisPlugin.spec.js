@@ -29,7 +29,7 @@ describe("PerformanceAnalysisPlugin", () => {
             should.not.exist(performanceAnalysisPluginInstance.performanceResultsData);
             performanceAnalysisPluginInstance.onPrepare();
             performanceAnalysisPluginInstance.performanceResultsData.should.be.an('object');
-            (performanceAnalysisPluginInstance.performanceResultsData instanceof PerformanceResultsData).should.be.eql(true);
+            (performanceAnalysisPluginInstance.performanceResultsData instanceof PerformanceResultsData).should.be.true;
         });
     });
 
@@ -41,4 +41,8 @@ describe("PerformanceAnalysisPlugin", () => {
         });
     });
 
+    describe('postTest', () => {
+        it('should blablabla', () => {
+        });
+    });
 });
