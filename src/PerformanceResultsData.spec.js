@@ -12,7 +12,7 @@ const NEW_SCENARIO = {
 };
 
 
-describe.only("PerformanceResultsData", () => {
+describe("PerformanceResultsData", () => {
 
     beforeEach(() => {
         performanceResultsDataInstance.scenarios.length = 0;
