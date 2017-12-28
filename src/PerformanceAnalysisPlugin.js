@@ -48,7 +48,6 @@ class PerformanceAnalysisPlugin {
         currentScenario.addStep(testInfo.name, testInfo.durationMillis);
         // increase the total execution time of the current scenario
         currentScenario.duration += testInfo.durationMillis;
-        
     }
 
     teardown() {

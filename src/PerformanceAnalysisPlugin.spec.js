@@ -42,7 +42,37 @@ describe("PerformanceAnalysisPlugin", () => {
     });
 
     describe('postTest', () => {
-        it('should blablabla', () => {
+        beforeEach(() => {
+            performanceAnalysisPluginInstance.performanceResultsData.scenarios.length = 0;
+        });
+
+        it('should increase the total execution time', () => {
+            performanceAnalysisPluginInstance.performanceResultsData.totalTime.should.be.eql(0);
+            performanceAnalysisPluginInstance.postTest(true, { durationMillis: 100 });
+            performanceAnalysisPluginInstance.performanceResultsData.totalTime.should.be.eql(100);
+            performanceAnalysisPluginInstance.postTest(true, { durationMillis: 100 });
+            performanceAnalysisPluginInstance.performanceResultsData.totalTime.should.be.eql(200);
+        });
+
+        it('should call the getOrCreateScenario', () => {
+            let spy = sandbox.spy(performanceAnalysisPluginInstance.performanceResultsData, 'getOrCreateScenario');
+            performanceAnalysisPluginInstance.postTest(true, { durationMillis: 100, category: 'scenario1' });
+            spy.should.have.been.calledWith('scenario1');
+        });
+
+        it('should call the addStep of the scenario', () => {
+            performanceAnalysisPluginInstance.performanceResultsData.scenarios.push({ duration: 100, category: 'scenario1' });
+            let scenario = performanceAnalysisPluginInstance.performanceResultsData.getOrCreateScenario('scenario1');
+            let spy = sandbox.spy(scenario, 'addStep');
+            performanceAnalysisPluginInstance.postTest(true, { durationMillis: 100, category: 'scenario1', name: 'step2' });
+            spy.should.have.been.calledWith('step2');
+        });
+
+        it('should increase the duration of the scenario', () => {
+            performanceAnalysisPluginInstance.performanceResultsData.scenarios.push({ duration: 100, category: 'scenario1' });
+            let scenario = performanceAnalysisPluginInstance.performanceResultsData.getOrCreateScenario('scenario1');
+            performanceAnalysisPluginInstance.postTest(true, { durationMillis: 100, category: 'scenario1', name: 'step2' });
+            scenario.duration.should.be.eql(100);
         });
     });
 });
