@@ -4,10 +4,11 @@ const StepData = require('./StepData');
 
 class ScenarioData {
 
-    constructor(scenarioName) {
+    constructor(scenarioName, filePath) {
         this.name = scenarioName;
         this.duration = 0;
         this.steps = [];
+        this.filePath = filePath;
     }
 
     addStep(stepName, stepDuration) {

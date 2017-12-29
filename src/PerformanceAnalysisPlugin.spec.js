@@ -4,6 +4,7 @@ const PerformanceAnalysisPlugin = require('./PerformanceAnalysisPlugin');
 const performanceAnalysisPluginInstance = new PerformanceAnalysisPlugin();
 const PerformanceResultsData = require('./PerformanceResultsData');
 
+const DEFAULT_SCENARIO = { durationMillis: 100, category: 'scenario1', name: 'step2', sourceLocation: { filePath: 'scenario_path' } };
 
 describe("PerformanceAnalysisPlugin", () => {
 
@@ -48,31 +49,38 @@ describe("PerformanceAnalysisPlugin", () => {
 
         it('should increase the total execution time', () => {
             performanceAnalysisPluginInstance.performanceResultsData.totalTime.should.be.eql(0);
-            performanceAnalysisPluginInstance.postTest(true, { durationMillis: 100 });
+            performanceAnalysisPluginInstance.postTest(true, DEFAULT_SCENARIO);
             performanceAnalysisPluginInstance.performanceResultsData.totalTime.should.be.eql(100);
-            performanceAnalysisPluginInstance.postTest(true, { durationMillis: 100 });
+            performanceAnalysisPluginInstance.postTest(true, DEFAULT_SCENARIO);
             performanceAnalysisPluginInstance.performanceResultsData.totalTime.should.be.eql(200);
         });
 
         it('should call the getOrCreateScenario', () => {
             let spy = sandbox.spy(performanceAnalysisPluginInstance.performanceResultsData, 'getOrCreateScenario');
-            performanceAnalysisPluginInstance.postTest(true, { durationMillis: 100, category: 'scenario1' });
-            spy.should.have.been.calledWith('scenario1');
+            performanceAnalysisPluginInstance.postTest(true, DEFAULT_SCENARIO);
+            spy.should.have.been.calledWith('scenario1', 'scenario_path');
         });
 
         it('should call the addStep of the scenario', () => {
-            performanceAnalysisPluginInstance.performanceResultsData.scenarios.push({ duration: 100, category: 'scenario1' });
-            let scenario = performanceAnalysisPluginInstance.performanceResultsData.getOrCreateScenario('scenario1');
+            performanceAnalysisPluginInstance.performanceResultsData.scenarios.push(DEFAULT_SCENARIO);
+            let scenario = performanceAnalysisPluginInstance.performanceResultsData.getOrCreateScenario('scenario1', 'scenario_path');
             let spy = sandbox.spy(scenario, 'addStep');
-            performanceAnalysisPluginInstance.postTest(true, { durationMillis: 100, category: 'scenario1', name: 'step2' });
+            performanceAnalysisPluginInstance.postTest(true, DEFAULT_SCENARIO);
             spy.should.have.been.calledWith('step2');
         });
 
         it('should increase the duration of the scenario', () => {
-            performanceAnalysisPluginInstance.performanceResultsData.scenarios.push({ duration: 100, category: 'scenario1' });
-            let scenario = performanceAnalysisPluginInstance.performanceResultsData.getOrCreateScenario('scenario1');
-            performanceAnalysisPluginInstance.postTest(true, { durationMillis: 100, category: 'scenario1', name: 'step2' });
+            performanceAnalysisPluginInstance.performanceResultsData.scenarios.push(DEFAULT_SCENARIO);
+            let scenario = performanceAnalysisPluginInstance.performanceResultsData.getOrCreateScenario('scenario1', 'scenario_path');
+            performanceAnalysisPluginInstance.postTest(true, DEFAULT_SCENARIO);
             scenario.duration.should.be.eql(100);
+        });
+
+        it('should set the scenario file path', () => {
+            performanceAnalysisPluginInstance.performanceResultsData.scenarios.push(DEFAULT_SCENARIO);
+            let scenario = performanceAnalysisPluginInstance.performanceResultsData.getOrCreateScenario('scenario1', 'scenario_path');
+            performanceAnalysisPluginInstance.postTest(true, DEFAULT_SCENARIO);
+            scenario.filePath.should.be.eql(DEFAULT_SCENARIO.sourceLocation.filePath);
         });
     });
 });

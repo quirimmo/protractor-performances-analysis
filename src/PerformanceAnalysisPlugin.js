@@ -44,7 +44,7 @@ class PerformanceAnalysisPlugin {
         // increase the total execution time of all the tests
         this.performanceResultsData.totalTime += testInfo.durationMillis;
         // get or create the current scenario if not exist
-        let currentScenario = this.performanceResultsData.getOrCreateScenario(testInfo.category);
+        let currentScenario = this.performanceResultsData.getOrCreateScenario(testInfo.category, testInfo.sourceLocation.filePath);
         currentScenario.addStep(testInfo.name, testInfo.durationMillis);
         // increase the total execution time of the current scenario
         currentScenario.duration += testInfo.durationMillis;

@@ -8,7 +8,8 @@ const EXISTING_SCENARIO = { name: 'scenario 1' };
 const NEW_SCENARIO = {
     name: 'new scenario',
     steps: [],
-    duration: 0
+    duration: 0,
+    filePath: 'scenario_path'
 };
 
 
@@ -47,30 +48,30 @@ describe("PerformanceResultsData", () => {
             
             it('should call the getScenarioByName method', () => {
                 let spy = sandbox.spy(performanceResultsDataInstance, 'getScenarioByName');
-                performanceResultsDataInstance.getOrCreateScenario('scenario 1');
+                performanceResultsDataInstance.getOrCreateScenario('scenario 1', 'scenario_path');
                 spy.should.have.been.calledWith('scenario 1');
             });
 
             it('should return the given scenario', () => {
-                performanceResultsDataInstance.getOrCreateScenario('scenario 1').should.be.eql(EXISTING_SCENARIO);
+                performanceResultsDataInstance.getOrCreateScenario('scenario 1', 'scenario_path').should.be.eql(EXISTING_SCENARIO);
             });
         });
 
         describe('scenario doesn\'t exist yet', () => {
             it('should call the getScenarioByName method', () => {
                 let spy = sinon.spy(performanceResultsDataInstance, 'getScenarioByName');
-                performanceResultsDataInstance.getOrCreateScenario('new scenario');
+                performanceResultsDataInstance.getOrCreateScenario('new scenario', 'scenario_path');
                 spy.should.have.been.calledWith('new scenario');
             });
 
             it('should call the createScenario method', () => {
                 let spy = sinon.spy(performanceResultsDataInstance, 'createScenario');
-                performanceResultsDataInstance.getOrCreateScenario('new scenario');
-                spy.should.have.been.calledWith('new scenario');
+                performanceResultsDataInstance.getOrCreateScenario('new scenario', 'scenario_path');
+                spy.should.have.been.calledWith('new scenario', 'scenario_path');
             });
 
             it('should return the created scenario', () => {
-                performanceResultsDataInstance.getOrCreateScenario('new scenario').should.be.eql(NEW_SCENARIO);
+                performanceResultsDataInstance.getOrCreateScenario('new scenario', 'scenario_path').should.be.eql(NEW_SCENARIO);
             });
         });
     });
@@ -81,7 +82,7 @@ describe("PerformanceResultsData", () => {
         });
 
         it('should return the given scenario if exists', () => {
-            performanceResultsDataInstance.createScenario('new scenario');
+            performanceResultsDataInstance.createScenario('new scenario', 'scenario_path');
             performanceResultsDataInstance.getScenarioByName('new scenario').should.be.eql(NEW_SCENARIO);
         });
     });
@@ -89,12 +90,12 @@ describe("PerformanceResultsData", () => {
     describe('createScenario', () => {
         it('should create the scenario if doesn\'t exist', () => {
             performanceResultsDataInstance.scenarios.should.have.length(0);
-            performanceResultsDataInstance.createScenario('new scenario');
+            performanceResultsDataInstance.createScenario('new scenario', 'scenario_path');
             performanceResultsDataInstance.scenarios.should.have.length(1);;
         });
 
         it('should return the just created scenario', () => {
-            performanceResultsDataInstance.createScenario('new scenario');
+            performanceResultsDataInstance.createScenario('new scenario', 'scenario_path');
             performanceResultsDataInstance.scenarios[0].should.be.eql(NEW_SCENARIO);
             (performanceResultsDataInstance.scenarios[0] instanceof ScenarioData).should.be.true
         });

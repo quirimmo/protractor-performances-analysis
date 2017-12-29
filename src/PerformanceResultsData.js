@@ -9,16 +9,16 @@ class PerformanceResultsData {
         this.scenarios = [];
     }
 
-    getOrCreateScenario(scenarioName) {
-        return this.getScenarioByName(scenarioName) || this.createScenario(scenarioName); 
+    getOrCreateScenario(scenarioName, filePath) {
+        return this.getScenarioByName(scenarioName) || this.createScenario(scenarioName, filePath); 
     }
 
     getScenarioByName(scenarioName) {
         return this.scenarios.find(scenario => scenario.name === scenarioName);
     }
 
-    createScenario(scenarioName) {
-        let scenario = new ScenarioData(scenarioName);
+    createScenario(scenarioName, filePath) {
+        let scenario = new ScenarioData(scenarioName, filePath);
         this.scenarios.push(scenario);
         return scenario;
     }
