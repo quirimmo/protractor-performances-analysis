@@ -6,16 +6,24 @@ const fs = require('fs');
 const PerformanceResultsData = require('./PerformanceResultsData');
 const DEFAULT_SCENARIO = { durationMillis: 100, category: 'scenario1', name: 'step2', sourceLocation: { filePath: 'scenario_path' } };
 
-const existsSyncStub = sandbox.stub().withArgs('results').returns(true);
-const mkdirSyncStub = sandbox.stub().withArgs('results').returns(true);
-const writeFileSync = sandbox.stub().withArgs('results/data.json').returns(true);
-const PerformanceAnalysisPlugin = proxyquire('./PerformanceAnalysisPlugin', { fs: { existsSync: existsSyncStub } });
-const performanceAnalysisPluginInstance = new PerformanceAnalysisPlugin();
+let existsSyncStub, mkdirSyncStub, writeFileSyncStub;
+let PerformanceAnalysisPlugin, performanceAnalysisPluginInstance;
 
+function instantiateFile(resultsFolderExists = true) {
+    existsSyncStub = sandbox.stub().withArgs('results').returns(resultsFolderExists);
+    mkdirSyncStub = sandbox.stub().withArgs('results').returns(true);
+    writeFileSyncStub = sandbox.stub().withArgs('results/data.json').returns(true);
+    PerformanceAnalysisPlugin = proxyquire('./PerformanceAnalysisPlugin', { fs: { existsSync: existsSyncStub, mkdirSync: mkdirSyncStub, writeFileSync: writeFileSyncStub } });
+    performanceAnalysisPluginInstance = new PerformanceAnalysisPlugin();
+}
 
 
 describe.only("PerformanceAnalysisPlugin", () => {
     describe('Init', () => {
+        before(() => {
+            instantiateFile();
+        });
+
         it('should define the class', () => {
             PerformanceAnalysisPlugin.should.not.be.undefined;
         });
@@ -33,6 +41,10 @@ describe.only("PerformanceAnalysisPlugin", () => {
     });
 
     describe('onPrepare', () => {
+        before(() => {
+            instantiateFile();
+        });
+
         it('should instantiate the PerformanceResultsData instance', () => {
             should.not.exist(performanceAnalysisPluginInstance.performanceResultsData);
             performanceAnalysisPluginInstance.onPrepare();
@@ -42,6 +54,10 @@ describe.only("PerformanceAnalysisPlugin", () => {
     });
 
     describe('setup', () => {
+        before(function() {
+            instantiateFile();
+        });
+
         it('should set the name', () => {
             performanceAnalysisPluginInstance.config = {};
             performanceAnalysisPluginInstance.setup();
@@ -50,6 +66,11 @@ describe.only("PerformanceAnalysisPlugin", () => {
     });
 
     describe('postTest', () => {
+        before(() => {
+            instantiateFile();
+            performanceAnalysisPluginInstance.onPrepare();
+        });
+
         beforeEach(() => {
             performanceAnalysisPluginInstance.performanceResultsData.scenarios.length = 0;
         });
@@ -92,10 +113,41 @@ describe.only("PerformanceAnalysisPlugin", () => {
     });
 
     describe('teardown', () => {
-        it('should set the name', () => {
+        it('should call the fs.existsSync method', () => {
+            instantiateFile();
             performanceAnalysisPluginInstance.teardown();
             existsSyncStub.should.have.been.called;
         });
-    });
 
+        describe('results folder already exists', () => {
+            before(() => {
+                instantiateFile();
+            });
+            
+            it('should not call the fs.mkdirSync because the folder already exists', () => {
+                performanceAnalysisPluginInstance.teardown();
+                mkdirSyncStub.should.not.have.been.called;
+            });
+        });
+
+        describe('results folder doesn\'t exist yet', () => {
+            before(() => {
+                instantiateFile(false);
+            });
+            
+            it('should call the fs.mkdirSync with the right argument because the folder doesn\'t exist yet', () => {
+                performanceAnalysisPluginInstance.teardown();
+                mkdirSyncStub.should.have.been.calledWith('results');
+            });
+        });
+
+        it('should call the fs.writeFileSync with the right arguments', () => {
+            instantiateFile();
+            performanceAnalysisPluginInstance.performanceResultsData = {
+                test: 'hello'
+            };
+            performanceAnalysisPluginInstance.teardown();
+            writeFileSyncStub.should.have.been.calledWith('results/data.json', JSON.stringify(performanceAnalysisPluginInstance.performanceResultsData, null, 4), 'utf8');
+        });
+    });
 });
