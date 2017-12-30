@@ -4,8 +4,12 @@ const PerformanceResultsData = require('./PerformanceResultsData');
 const util = require('util');
 const fs = require('fs');
 
+const OUTPUT_FOLDER = 'results';
+const OUTPUT_FILE = 'data.json';
+
 
 class PerformanceAnalysisPlugin {
+
 
     constructor() {}
 
@@ -53,15 +57,14 @@ class PerformanceAnalysisPlugin {
 
     /**
      * @description
-     * Called when all the tests will finish and protractor is going to shut down
+     * Called when all the tests are finished and protractor is going to shut down
      */
     teardown() {
-        if (!fs.existsSync('results')){
-            fs.mkdirSync('results');
+        if (!fs.existsSync(OUTPUT_FOLDER)){
+            fs.mkdirSync(OUTPUT_FOLDER);
         }
-        fs.writeFileSync('results/data.json', JSON.stringify(this.performanceResultsData, null, 4), 'utf8');
+        fs.writeFileSync(`${OUTPUT_FOLDER}/${OUTPUT_FILE}`, JSON.stringify(this.performanceResultsData, null, 4), 'utf8');
     }
-
 
 }
 

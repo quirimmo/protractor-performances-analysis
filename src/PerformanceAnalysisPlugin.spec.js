@@ -1,13 +1,20 @@
 'use strict';
 
-const PerformanceAnalysisPlugin = require('./PerformanceAnalysisPlugin');
-const performanceAnalysisPluginInstance = new PerformanceAnalysisPlugin();
-const PerformanceResultsData = require('./PerformanceResultsData');
+const proxyquire = require('proxyquire');
+const fs = require('fs');
 
+const PerformanceResultsData = require('./PerformanceResultsData');
 const DEFAULT_SCENARIO = { durationMillis: 100, category: 'scenario1', name: 'step2', sourceLocation: { filePath: 'scenario_path' } };
 
-describe("PerformanceAnalysisPlugin", () => {
+const existsSyncStub = sandbox.stub().withArgs('results').returns(true);
+const mkdirSyncStub = sandbox.stub().withArgs('results').returns(true);
+const writeFileSync = sandbox.stub().withArgs('results/data.json').returns(true);
+const PerformanceAnalysisPlugin = proxyquire('./PerformanceAnalysisPlugin', { fs: { existsSync: existsSyncStub } });
+const performanceAnalysisPluginInstance = new PerformanceAnalysisPlugin();
 
+
+
+describe.only("PerformanceAnalysisPlugin", () => {
     describe('Init', () => {
         it('should define the class', () => {
             PerformanceAnalysisPlugin.should.not.be.undefined;
@@ -83,4 +90,12 @@ describe("PerformanceAnalysisPlugin", () => {
             scenario.filePath.should.be.eql(DEFAULT_SCENARIO.sourceLocation.filePath);
         });
     });
+
+    describe('teardown', () => {
+        it('should set the name', () => {
+            performanceAnalysisPluginInstance.teardown();
+            existsSyncStub.should.have.been.called;
+        });
+    });
+
 });
