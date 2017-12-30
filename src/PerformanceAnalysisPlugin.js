@@ -1,7 +1,8 @@
 'use strict';
 
 const PerformanceResultsData = require('./PerformanceResultsData');
-const util = require('util')
+const util = require('util');
+const fs = require('fs');
 
 
 class PerformanceAnalysisPlugin {
@@ -50,12 +51,15 @@ class PerformanceAnalysisPlugin {
         currentScenario.duration += testInfo.durationMillis;
     }
 
+    /**
+     * @description
+     * Called when all the tests will finish and protractor is going to shut down
+     */
     teardown() {
-        // here tests are finished
-        console.log(util.inspect(this.performanceResultsData, {showHidden: false, depth: null}))
+        fs.writeFileSync('results/message.json', JSON.stringify(this.performanceResultsData, null, 4), 'utf8');
     }
 
-    
+
 }
 
 module.exports = PerformanceAnalysisPlugin;

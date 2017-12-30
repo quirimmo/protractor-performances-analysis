@@ -7,8 +7,8 @@ class ScenarioData {
     constructor(scenarioName, filePath) {
         this.name = scenarioName;
         this.duration = 0;
-        this.steps = [];
         this.filePath = filePath;
+        this.steps = [];
     }
 
     addStep(stepName, stepDuration) {

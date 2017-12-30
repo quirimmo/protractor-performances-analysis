@@ -1,0 +1,74 @@
+{
+    "totalTime": 11483,
+    "scenarios": [
+        {
+            "name": "Main Test: First Scenario",
+            "duration": 3077,
+            "filePath": "test\\main.feature",
+            "steps": [
+                {
+                    "name": "Given I load the page",
+                    "duration": 569
+                },
+                {
+                    "name": "When I do some useless operation",
+                    "duration": 2505
+                },
+                {
+                    "name": "Then I check the expectation",
+                    "duration": 3
+                }
+            ]
+        },
+        {
+            "name": "Main Test: Second Scenario",
+            "duration": 2904,
+            "filePath": "test\\main.feature",
+            "steps": [
+                {
+                    "name": "Given I load the page",
+                    "duration": 398
+                },
+                {
+                    "name": "When I do some useless operation",
+                    "duration": 2504
+                },
+                {
+                    "name": "Then I check the expectation",
+                    "duration": 2
+                }
+            ]
+        },
+        {
+            "name": "Main Test: Third Scenario - Outline Example",
+            "duration": 5502,
+            "filePath": "test\\main.feature",
+            "steps": [
+                {
+                    "name": "Given I load the page",
+                    "duration": 203
+                },
+                {
+                    "name": "When I do some useless operation",
+                    "duration": 2504
+                },
+                {
+                    "name": "Then I check the expectation",
+                    "duration": 0
+                },
+                {
+                    "name": "Given I load the page",
+                    "duration": 292
+                },
+                {
+                    "name": "When I do some useless operation",
+                    "duration": 2502
+                },
+                {
+                    "name": "Then I check the expectation",
+                    "duration": 1
+                }
+            ]
+        }
+    ]
+}

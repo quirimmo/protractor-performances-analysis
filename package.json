@@ -1,39 +1,40 @@
 {
-  "name": "protractor-performances-analysis",
-  "version": "1.0.0",
-  "description": "A protractor plugin in order to display and manage the performances of e2e tests",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/quirimmo/protractor-performances-analysis.git"
-  },
-  "author": "Quirino Lo Russo",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/quirimmo/protractor-performances-analysis/issues"
-  },
-  "homepage": "https://github.com/quirimmo/protractor-performances-analysis#readme",
-  "devDependencies": {
-    "angular": "^1.6.4",
-    "angular-ui-router": "^1.0.3",
-    "chai": "^4.1.2",
-    "chai-as-promised": "^7.1.1",
-    "cucumber": "^3.2.0",
-    "gulp": "^3.9.1",
-    "gulp-clean": "^0.3.2",
-    "gulp-cli": "^1.4.0",
-    "gulp-live-server": "0.0.31",
-    "gulp-minify": "^1.0.0",
-    "gulp-mocha": "^4.3.1",
-    "gulp-protractor": "^4.1.0",
-    "jasmine": "^2.8.0",
-    "mocha": "^4.0.1",
-    "protractor": "^5.2.2",
-    "protractor-cucumber-framework": "^4.1.1",
-    "sinon": "^4.1.3",
-    "sinon-chai": "^2.14.0"
-  }
+    "name": "protractor-performances-analysis",
+    "version": "1.0.0",
+    "description": "A protractor plugin in order to display and manage the performances of e2e tests",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/quirimmo/protractor-performances-analysis.git"
+    },
+    "author": "Quirino Lo Russo",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/quirimmo/protractor-performances-analysis/issues"
+    },
+    "homepage": "https://github.com/quirimmo/protractor-performances-analysis#readme",
+    "devDependencies": {
+        "angular": "^1.6.4",
+        "angular-ui-router": "^1.0.3",
+        "chai": "^4.1.2",
+        "chai-as-promised": "^7.1.1",
+        "cucumber": "^3.2.0",
+        "gulp": "^3.9.1",
+        "gulp-clean": "^0.3.2",
+        "gulp-cli": "^1.4.0",
+        "gulp-live-server": "0.0.31",
+        "gulp-minify": "^1.0.0",
+        "gulp-mocha": "^4.3.1",
+        "gulp-protractor": "^4.1.0",
+        "jasmine": "^2.8.0",
+        "mocha": "^4.0.1",
+        "protractor": "^5.2.2",
+        "protractor-cucumber-framework": "^4.1.1",
+        "sinon": "^4.1.3",
+        "sinon-chai": "^2.14.0"
+    },
+    "dependencies": {}
 }
