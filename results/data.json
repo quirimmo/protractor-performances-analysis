@@ -1,14 +1,14 @@
 {
-    "totalTime": 11483,
+    "totalTime": 11461,
     "scenarios": [
         {
             "name": "Main Test: First Scenario",
-            "duration": 3077,
+            "duration": 3004,
             "filePath": "test\\main.feature",
             "steps": [
                 {
                     "name": "Given I load the page",
-                    "duration": 569
+                    "duration": 494
                 },
                 {
                     "name": "When I do some useless operation",
@@ -16,53 +16,53 @@
                 },
                 {
                     "name": "Then I check the expectation",
-                    "duration": 3
+                    "duration": 5
                 }
             ]
         },
         {
             "name": "Main Test: Second Scenario",
-            "duration": 2904,
+            "duration": 2922,
             "filePath": "test\\main.feature",
             "steps": [
                 {
                     "name": "Given I load the page",
-                    "duration": 398
+                    "duration": 421
                 },
                 {
                     "name": "When I do some useless operation",
-                    "duration": 2504
+                    "duration": 2500
                 },
                 {
                     "name": "Then I check the expectation",
-                    "duration": 2
+                    "duration": 1
                 }
             ]
         },
         {
             "name": "Main Test: Third Scenario - Outline Example",
-            "duration": 5502,
+            "duration": 5535,
             "filePath": "test\\main.feature",
             "steps": [
                 {
                     "name": "Given I load the page",
-                    "duration": 203
+                    "duration": 313
+                },
+                {
+                    "name": "When I do some useless operation",
+                    "duration": 2507
+                },
+                {
+                    "name": "Then I check the expectation",
+                    "duration": 1
+                },
+                {
+                    "name": "Given I load the page",
+                    "duration": 209
                 },
                 {
                     "name": "When I do some useless operation",
                     "duration": 2504
-                },
-                {
-                    "name": "Then I check the expectation",
-                    "duration": 0
-                },
-                {
-                    "name": "Given I load the page",
-                    "duration": 292
-                },
-                {
-                    "name": "When I do some useless operation",
-                    "duration": 2502
                 },
                 {
                     "name": "Then I check the expectation",

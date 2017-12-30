@@ -56,7 +56,10 @@ class PerformanceAnalysisPlugin {
      * Called when all the tests will finish and protractor is going to shut down
      */
     teardown() {
-        fs.writeFileSync('results/message.json', JSON.stringify(this.performanceResultsData, null, 4), 'utf8');
+        if (!fs.existsSync('results')){
+            fs.mkdirSync('results');
+        }
+        fs.writeFileSync('results/data.json', JSON.stringify(this.performanceResultsData, null, 4), 'utf8');
     }
 
 
