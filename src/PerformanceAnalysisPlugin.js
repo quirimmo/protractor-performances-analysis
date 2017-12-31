@@ -60,10 +60,17 @@ class PerformanceAnalysisPlugin {
      * Called when all the tests are finished and protractor is going to shut down
      */
     teardown() {
+        this._createResultFolderIfNotExists();
+        fs.writeFileSync(`${OUTPUT_FOLDER}/${OUTPUT_FILE}`, JSON.stringify(this.performanceResultsData, null, 4), 'utf8');
+    }
+
+
+    // Private Methods
+    // ---------------------------------------------------------------------------------------------------------------
+    _createResultFolderIfNotExists() {
         if (!fs.existsSync(OUTPUT_FOLDER)){
             fs.mkdirSync(OUTPUT_FOLDER);
         }
-        fs.writeFileSync(`${OUTPUT_FOLDER}/${OUTPUT_FILE}`, JSON.stringify(this.performanceResultsData, null, 4), 'utf8');
     }
 
 }

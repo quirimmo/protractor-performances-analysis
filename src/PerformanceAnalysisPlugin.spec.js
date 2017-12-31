@@ -18,7 +18,7 @@ function instantiateFile(resultsFolderExists = true) {
 }
 
 
-describe.only("PerformanceAnalysisPlugin", () => {
+describe("PerformanceAnalysisPlugin", () => {
     describe('Init', () => {
         before(() => {
             instantiateFile();
