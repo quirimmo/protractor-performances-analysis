@@ -6,6 +6,7 @@ const fs = require('fs');
 
 const OUTPUT_FOLDER = 'results';
 const OUTPUT_FILE = 'data.json';
+const OUTPUT_STATISTICS_FILE = 'statistics.json';
 
 
 class PerformanceAnalysisPlugin {
@@ -13,6 +14,8 @@ class PerformanceAnalysisPlugin {
 
     constructor() {}
 
+    // Public Methods
+    // --------------------------------------------------------------------------------------
     setup() {
         // set the default name for the plugin
         this.name = 'Protractor Performances Analysis Plugin';
@@ -61,18 +64,38 @@ class PerformanceAnalysisPlugin {
      */
     teardown() {
         this._createResultFolderIfNotExists();
-        fs.writeFileSync(`${OUTPUT_FOLDER}/${OUTPUT_FILE}`, JSON.stringify(this.performanceResultsData, null, 4), 'utf8');
+        this._writeJSONFile(`${OUTPUT_FOLDER}/${OUTPUT_FILE}`, this.performanceResultsData);
+        this.outputGlobalStatistics();
     }
 
+    outputGlobalStatistics() {
+        // scenarios statistics 
+        const scenariosExecutionTimes = this.performanceResultsData.scenarios
+            .sort((a, b) => b.duration - a.duration)
+            .map((a) => { return { name: a.name, file: a.filePath, duration: a.duration }; });
+        const allSteps = [].concat(...this.performanceResultsData.scenarios.map((a) => a.steps));
+        const stepsExecutionTimes = allSteps
+            .sort((a, b) => b.duration - a.duration)
+            .map((a) => { return { name: a.name, duration: a.duration }; });
+        const mainStatistics = {
+            duration: this.performanceResultsData.totalTime,
+            scenarios: scenariosExecutionTimes,
+            steps: stepsExecutionTimes
+        };
+        this._writeJSONFile(`${OUTPUT_FOLDER}/${OUTPUT_STATISTICS_FILE}`, mainStatistics);
+    }
 
     // Private Methods
     // ---------------------------------------------------------------------------------------------------------------
     _createResultFolderIfNotExists() {
-        if (!fs.existsSync(OUTPUT_FOLDER)){
+        if (!fs.existsSync(OUTPUT_FOLDER)) {
             fs.mkdirSync(OUTPUT_FOLDER);
         }
     }
 
+    _writeJSONFile(outputFilePath, fileJSONContent) {
+        fs.writeFileSync(outputFilePath, JSON.stringify(fileJSONContent, null, 4), 'utf8');
+    }
 }
 
 module.exports = PerformanceAnalysisPlugin;

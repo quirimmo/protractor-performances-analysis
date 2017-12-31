@@ -1,0 +1,70 @@
+{
+    "duration": 11490,
+    "scenarios": [
+        {
+            "name": "Main Test: Third Scenario - Outline Example",
+            "file": "test\\main.feature",
+            "duration": 5553
+        },
+        {
+            "name": "Main Test: First Scenario",
+            "file": "test\\main.feature",
+            "duration": 3015
+        },
+        {
+            "name": "Main Test: Second Scenario",
+            "file": "test\\main.feature",
+            "duration": 2922
+        }
+    ],
+    "steps": [
+        {
+            "name": "When I do some useless operation",
+            "duration": 2505
+        },
+        {
+            "name": "When I do some useless operation",
+            "duration": 2504
+        },
+        {
+            "name": "When I do some useless operation",
+            "duration": 2504
+        },
+        {
+            "name": "When I do some useless operation",
+            "duration": 2502
+        },
+        {
+            "name": "Given I load the page",
+            "duration": 507
+        },
+        {
+            "name": "Given I load the page",
+            "duration": 418
+        },
+        {
+            "name": "Given I load the page",
+            "duration": 344
+        },
+        {
+            "name": "Given I load the page",
+            "duration": 197
+        },
+        {
+            "name": "Then I check the expectation",
+            "duration": 4
+        },
+        {
+            "name": "Then I check the expectation",
+            "duration": 2
+        },
+        {
+            "name": "Then I check the expectation",
+            "duration": 2
+        },
+        {
+            "name": "Then I check the expectation",
+            "duration": 1
+        }
+    ]
+}
