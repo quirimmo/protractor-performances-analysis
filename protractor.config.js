@@ -11,6 +11,7 @@ const seleniumVersion = findLocalSeleniumVersion();
 const SELENIUM_SERVER_JAR_PATH = `./node_modules/protractor/node_modules/webdriver-manager/selenium/selenium-server-standalone-${seleniumVersion}.jar`;
 const SPECS_PATH = ['./test/**/*.feature'];
 const STEPS_PATH = ['./test/**/*.steps.js'];
+// const PROTRACTOR_PLUGINS_INJECTION = [{ inline: require('./index'), usingCucumber: true }];
 const PROTRACTOR_PLUGINS_INJECTION = [{ inline: require('./index') }];
 
 

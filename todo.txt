@@ -1,0 +1,5 @@
+Add scearios references to the steps statistics outputs
+Try to generate a simple HTML report for now
+Add tasks for building
+Add travis with check fo unit and e2e tests
+Try to add npm publish from travis
