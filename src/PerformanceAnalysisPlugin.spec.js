@@ -5,6 +5,18 @@ const fs = require('fs');
 
 const PerformanceResultsData = require('./PerformanceResultsData');
 const DEFAULT_SCENARIO = { durationMillis: 100, category: 'scenario1', name: 'step2', sourceLocation: { filePath: 'scenario_path' } };
+const DEFAULT_RESULTS_DATA = {
+    totalTime: 1000,
+    scenarios: [
+        { name: 'Scenario 1', filePath: 'file_path_1.feature', duration: 500, steps: [{ name: 'Step 1', duration: 5 }, { name: 'Step 2', duration: 9 }] },
+        { name: 'Scenario 2', filePath: 'file_path_2.feature', duration: 800, steps: [{ name: 'Step 3', duration: 8 }, { name: 'Step 4', duration: 11 }] }
+    ]
+};
+const EXPECTED_STATISTICS_OUTPUT = {
+    duration: 1000,
+    scenarios: [{ name: 'Scenario 2', file: 'file_path_2.feature', duration: 800 }, { name: 'Scenario 1', file: 'file_path_1.feature', duration: 500 }],
+    steps: [{ name: 'Step 4', duration: 11 }, { name: 'Step 2', duration: 9 }, { name: 'Step 3', duration: 8 }, { name: 'Step 1', duration: 5 }]
+};
 
 let existsSyncStub, mkdirSyncStub, writeFileSyncStub;
 let PerformanceAnalysisPlugin, performanceAnalysisPluginInstance;
@@ -115,39 +127,37 @@ describe("PerformanceAnalysisPlugin", () => {
     describe('teardown', () => {
         it('should call the fs.existsSync method', () => {
             instantiateFile();
+            performanceAnalysisPluginInstance.performanceResultsData = DEFAULT_RESULTS_DATA;
             performanceAnalysisPluginInstance.teardown();
             existsSyncStub.should.have.been.called;
         });
 
-        describe('results folder already exists', () => {
-            before(() => {
-                instantiateFile();
-            });
-            
-            it('should not call the fs.mkdirSync because the folder already exists', () => {
-                performanceAnalysisPluginInstance.teardown();
-                mkdirSyncStub.should.not.have.been.called;
-            });
+        it('should not call the fs.mkdirSync because the folder already exists', () => {
+            instantiateFile();
+            performanceAnalysisPluginInstance.performanceResultsData = DEFAULT_RESULTS_DATA;
+            performanceAnalysisPluginInstance.teardown();
+            mkdirSyncStub.should.not.have.been.called;
         });
 
-        describe('results folder doesn\'t exist yet', () => {
-            before(() => {
-                instantiateFile(false);
-            });
-            
-            it('should call the fs.mkdirSync with the right argument because the folder doesn\'t exist yet', () => {
-                performanceAnalysisPluginInstance.teardown();
-                mkdirSyncStub.should.have.been.calledWith('results');
-            });
+        it('should call the fs.mkdirSync with the right argument because the folder doesn\'t exist yet', () => {
+            instantiateFile(false);
+            performanceAnalysisPluginInstance.performanceResultsData = DEFAULT_RESULTS_DATA;
+            performanceAnalysisPluginInstance.teardown();
+            mkdirSyncStub.should.have.been.calledWith('results');
         });
 
         it('should call the fs.writeFileSync with the right arguments', () => {
             instantiateFile();
-            performanceAnalysisPluginInstance.performanceResultsData = {
-                test: 'hello'
-            };
+            performanceAnalysisPluginInstance.performanceResultsData = DEFAULT_RESULTS_DATA;
             performanceAnalysisPluginInstance.teardown();
-            writeFileSyncStub.should.have.been.calledWith('results/data.json', JSON.stringify(performanceAnalysisPluginInstance.performanceResultsData, null, 4), 'utf8');
+            writeFileSyncStub.should.have.been.calledWith('results/data.json', JSON.stringify(DEFAULT_RESULTS_DATA, null, 4), 'utf8');
+        });
+
+        it('should call the fs.writeFileSync with the right arguments for writing the main statistics of the tests', () => {
+            instantiateFile();
+            performanceAnalysisPluginInstance.performanceResultsData = DEFAULT_RESULTS_DATA;
+            performanceAnalysisPluginInstance.teardown();
+            writeFileSyncStub.should.have.been.calledWith('results/statistics.json', JSON.stringify(EXPECTED_STATISTICS_OUTPUT, null, 4), 'utf8');
         });
     });
 });

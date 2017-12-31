@@ -65,18 +65,23 @@ class PerformanceAnalysisPlugin {
     teardown() {
         this._createResultFolderIfNotExists();
         this._writeJSONFile(`${OUTPUT_FOLDER}/${OUTPUT_FILE}`, this.performanceResultsData);
-        this.outputGlobalStatistics();
+        this._outputGlobalStatistics();
     }
 
-    outputGlobalStatistics() {
+    
+    // Private Methods
+    // ---------------------------------------------------------------------------------------------------------------
+    _outputGlobalStatistics() {
         // scenarios statistics 
         const scenariosExecutionTimes = this.performanceResultsData.scenarios
             .sort((a, b) => b.duration - a.duration)
             .map((a) => { return { name: a.name, file: a.filePath, duration: a.duration }; });
+
         const allSteps = [].concat(...this.performanceResultsData.scenarios.map((a) => a.steps));
         const stepsExecutionTimes = allSteps
             .sort((a, b) => b.duration - a.duration)
             .map((a) => { return { name: a.name, duration: a.duration }; });
+            
         const mainStatistics = {
             duration: this.performanceResultsData.totalTime,
             scenarios: scenariosExecutionTimes,
@@ -84,9 +89,7 @@ class PerformanceAnalysisPlugin {
         };
         this._writeJSONFile(`${OUTPUT_FOLDER}/${OUTPUT_STATISTICS_FILE}`, mainStatistics);
     }
-
-    // Private Methods
-    // ---------------------------------------------------------------------------------------------------------------
+    
     _createResultFolderIfNotExists() {
         if (!fs.existsSync(OUTPUT_FOLDER)) {
             fs.mkdirSync(OUTPUT_FOLDER);
