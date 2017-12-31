@@ -76,17 +76,18 @@ class PerformanceAnalysisPlugin {
         const scenariosExecutionTimes = this.performanceResultsData.scenarios
             .sort((a, b) => b.duration - a.duration)
             .map((a) => { return { name: a.name, file: a.filePath, duration: a.duration }; });
-
+        // steps statistics
         const allSteps = [].concat(...this.performanceResultsData.scenarios.map((a) => a.steps));
         const stepsExecutionTimes = allSteps
             .sort((a, b) => b.duration - a.duration)
             .map((a) => { return { name: a.name, duration: a.duration }; });
-            
+        // assembling json statistics results output file 
         const mainStatistics = {
             duration: this.performanceResultsData.totalTime,
             scenarios: scenariosExecutionTimes,
             steps: stepsExecutionTimes
         };
+        // create the statistics json file
         this._writeJSONFile(`${OUTPUT_FOLDER}/${OUTPUT_STATISTICS_FILE}`, mainStatistics);
     }
     
