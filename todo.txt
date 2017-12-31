@@ -1,0 +1,4 @@
+set up deploy tasks
+test deploy to another protractor 
+set up travis with all the checks of unit tests and e2e tests
+try to deploy directly from travis and if it works, move it in qprotractor too
