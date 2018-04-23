@@ -5,13 +5,11 @@ const util = require('util');
 const fs = require('fs');
 
 const OUTPUT_FOLDER = 'results';
+const OUTPUT_DATA_FOLDER = 'data';
 const OUTPUT_FILE = 'data.json';
 const OUTPUT_STATISTICS_FILE = 'statistics.json';
 
-
 class PerformanceAnalysisPlugin {
-
-
     constructor() {}
 
     // Public Methods
@@ -36,34 +34,28 @@ class PerformanceAnalysisPlugin {
     /**
      * Called inside browser.get() after the page loads and after angular is done its bootstrap phase
      */
-    onPageStable() {
-    }
+    onPageStable() {}
 
     /**
      * Called inside browser.get() after the page loads and before angular bootstraps
      */
-    onPageLoad() {
-
-    }
+    onPageLoad() {}
 
     /**
      * Called after the test results have been finalized and any other job associated to the end of the tests has started
      */
-    postResults() {
-    }
+    postResults() {}
 
     /**
      * Called inside the browser.waitForAngular() if you want protractor to wait for some other promise before to return from browser.waitForAngular()
      */
-    waitForPromise() {
-    }
+    waitForPromise() {}
 
     /**
      * Same as waitForPromise but it waits for a particular condition, not only a promise resolution.
      * This function will be called repeatedly until it becomes true
      */
-    waitForCondition() {
-    }
+    waitForCondition() {}
 
     /**
      * If specified, skip the default protractor angular sync wait
@@ -92,7 +84,10 @@ class PerformanceAnalysisPlugin {
         // increase the total execution time of all the tests
         this.performanceResultsData.totalTime += testInfo.durationMillis;
         // get or create the current scenario if not exist
-        let currentScenario = this.performanceResultsData.getOrCreateScenario(testInfo.category, testInfo.sourceLocation.filePath);
+        let currentScenario = this.performanceResultsData.getOrCreateScenario(
+            testInfo.category,
+            testInfo.sourceLocation.filePath
+        );
         currentScenario.addStep(testInfo.name, testInfo.durationMillis);
         // increase the total execution time of the current scenario
         currentScenario.duration += testInfo.durationMillis;
@@ -104,7 +99,10 @@ class PerformanceAnalysisPlugin {
      */
     teardown() {
         this._createResultFolderIfNotExists();
-        this._writeJSONFile(`${OUTPUT_FOLDER}/${OUTPUT_FILE}`, this.performanceResultsData);
+        this._writeJSONFile(
+            `${OUTPUT_FOLDER}/${OUTPUT_DATA_FOLDER}/${OUTPUT_FILE}`,
+            this.performanceResultsData
+        );
         this._outputGlobalStatistics();
     }
 
@@ -114,15 +112,21 @@ class PerformanceAnalysisPlugin {
         // scenarios statistics
         const scenariosExecutionTimes = this.performanceResultsData.scenarios
             .sort((a, b) => b.duration - a.duration)
-            .map((a) => { return { name: a.name, file: a.filePath, duration: a.duration }; });
+            .map(a => {
+                return { name: a.name, file: a.filePath, duration: a.duration };
+            });
         // steps statistics
-        const allSteps = [].concat(...this.performanceResultsData.scenarios.map((a) => a.steps));
+        const allSteps = [].concat(
+            ...this.performanceResultsData.scenarios.map(a => a.steps)
+        );
         const stepsExecutionTimes = allSteps
             .sort((a, b) => b.duration - a.duration)
-            .map((a) => { return { name: a.name, duration: a.duration }; });
+            .map(a => {
+                return { name: a.name, duration: a.duration };
+            });
         // creates unique steps
         let flags = {};
-        const uniqueSteps = stepsExecutionTimes.filter((entry) => {
+        const uniqueSteps = stepsExecutionTimes.filter(entry => {
             if (flags[entry.name]) {
                 return false;
             }
@@ -133,10 +137,13 @@ class PerformanceAnalysisPlugin {
         const mainStatistics = {
             duration: this.performanceResultsData.totalTime,
             scenarios: scenariosExecutionTimes,
-            steps: uniqueSteps
+            steps: uniqueSteps,
         };
         // create the statistics json file
-        this._writeJSONFile(`${OUTPUT_FOLDER}/${OUTPUT_STATISTICS_FILE}`, mainStatistics);
+        this._writeJSONFile(
+            `${OUTPUT_FOLDER}/${OUTPUT_DATA_FOLDER}/${OUTPUT_STATISTICS_FILE}`,
+            mainStatistics
+        );
     }
 
     _createResultFolderIfNotExists() {
@@ -146,7 +153,11 @@ class PerformanceAnalysisPlugin {
     }
 
     _writeJSONFile(outputFilePath, fileJSONContent) {
-        fs.writeFileSync(outputFilePath, JSON.stringify(fileJSONContent, null, 4), 'utf8');
+        fs.writeFileSync(
+            outputFilePath,
+            JSON.stringify(fileJSONContent, null, 4),
+            'utf8'
+        );
     }
 }
 

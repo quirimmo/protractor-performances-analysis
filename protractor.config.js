@@ -47,7 +47,7 @@ function findLocalSeleniumVersion() {
     return seleniumVersionFound;
 
     function onEachFile(file) {
-        res = file.match(/selenium-server-standalone-(\d{1}.\d{1}.\d{1}).jar/i);
+        res = file.match(/selenium-server-standalone-(\d{1}.\d{2}.\d{1}).jar/i);
         if (res) {
             seleniumVersionFound = res[1];
         }

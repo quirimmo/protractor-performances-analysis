@@ -150,14 +150,14 @@ describe("PerformanceAnalysisPlugin", () => {
             instantiateFile();
             performanceAnalysisPluginInstance.performanceResultsData = DEFAULT_RESULTS_DATA;
             performanceAnalysisPluginInstance.teardown();
-            writeFileSyncStub.should.have.been.calledWith('results/data.json', JSON.stringify(DEFAULT_RESULTS_DATA, null, 4), 'utf8');
+            writeFileSyncStub.should.have.been.calledWith('results/data/data.json', JSON.stringify(DEFAULT_RESULTS_DATA, null, 4), 'utf8');
         });
 
         it('should call the fs.writeFileSync with the right arguments for writing the main statistics of the tests', () => {
             instantiateFile();
             performanceAnalysisPluginInstance.performanceResultsData = DEFAULT_RESULTS_DATA;
             performanceAnalysisPluginInstance.teardown();
-            writeFileSyncStub.should.have.been.calledWith('results/statistics.json', JSON.stringify(EXPECTED_STATISTICS_OUTPUT, null, 4), 'utf8');
+            writeFileSyncStub.should.have.been.calledWith('results/data/statistics.json', JSON.stringify(EXPECTED_STATISTICS_OUTPUT, null, 4), 'utf8');
         });
     });
 });
